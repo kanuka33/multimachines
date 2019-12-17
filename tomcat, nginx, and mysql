@@ -1,0 +1,40 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
+HOST_IP = '192.168.30.90'
+HOST2_IP = '192.168.30.91'
+HOST3_IP = '192.168.30.92'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+config.vm.define "nginx" do |nginxserver|
+nginxserver.vm.hostname = "nginx.server"
+nginxserver.vm.box = "bento/centos-7.2"
+nginxserver.vm.box_url = "bento/centos-7.2"
+nginxserver.vm.network :private_network,
+      ip: HOST_IP,
+      netmask: '255.255.255.0'
+nginxserver.vm.provision 'shell', path: 'nginx.sh'	
+end
+
+config.vm.define "tomcat" do |tomcatserver|
+tomcatserver.vm.hostname = "tomcat.server"
+tomcatserver.vm.box = "bento/centos-7.2"
+tomcatserver.vm.box_url = "bento/centos-7.2"
+tomcatserver.vm.network :private_network,
+      ip: HOST2_IP,
+      netmask: '255.255.255.0'
+tomcatserver.vm.provision 'shell', path: 'tomcat.sh'	
+end
+
+config.vm.define "mysql" do |mysqlserver|
+mysqlserver.vm.hostname = "mysql.server"
+mysqlserver.vm.box = "bento/centos-7.2"
+mysqlserver.vm.box_url = "bento/centos-7.2"
+mysqlserver.vm.network :private_network,
+      ip: HOST3_IP,
+      netmask: '255.255.255.0'
+mysqlserver.vm.provision 'shell', path: 'mysql.sh'	
+end
+end
